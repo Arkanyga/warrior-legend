@@ -45,32 +45,6 @@ function drawRoom() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-function tileAtPixelCoord(pixelX, pixelY) {
-  let gridCoord = findOutRowAndCol(pixelX, pixelY)
-  //индекс ячейки в которую ударили
-  let tileIndex = gridCoord.col + ROOM_COLS * gridCoord.row;
-  return roomGrid[tileIndex];
-}
-
-function findOutRowAndCol(pixelX, pixelY) {
-  let tileRow = Math.floor(pixelY / TILE_H);
-  let tileCol = Math.floor(pixelX / TILE_W);
-  return {
-    row: tileRow,
-    col: tileCol
-  }
-}
-
 function getTileAtPixelCoord(pixelX, pixelY) {
   var tileCol = pixelX / TILE_W;
   var tileRow = pixelY / TILE_H;
@@ -79,11 +53,11 @@ function getTileAtPixelCoord(pixelX, pixelY) {
   tileRow = Math.floor(tileRow);
   if (tileCol < 0 || tileCol >= ROOM_COLS ||
     tileRow < 0 || tileRow >= ROOM_ROWS) {
-    return TILE_WALL;
+    return undefined;
   }
 
-  var tileIndex = roomTileToIndex(tileCol, tileRow);
-  return roomGrid[tileIndex];
+  let tileIndex = tileCol + ROOM_COLS * tileRow;
+  return tileIndex;
 }
 
 function tileTypeHasTransparency(checkTileType) {

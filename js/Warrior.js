@@ -1,15 +1,15 @@
 
-const PLAYER_MOVE_SPEED = 3;
+const PLAYER_MOVE_SPEED = 7;
 
 
 
 class Warrior {
   constructor(northKey, southKey, westKey, eastKey, playerPic) {
-    this.x;
-    this.y;
+    this.x = 100;//дефолтные значения чтобы в любом случае игрок появился на поле даже если на карте нет 2
+    this.y = 100;
     this.homeX;
     this.homeY;
-
+    this.keysHeld = 0;
     this.keyHeldNorth = false;
     this.keyHeldSouth = false;
     this.keyHeldTurnWest = false;
@@ -46,12 +46,35 @@ class Warrior {
     if (this.keyHeldTurnEast) {
       nextX += PLAYER_MOVE_SPEED;
     }
-    let walkIntoTileType = tileAtPixelCoord(nextX, nextY);
-    if (walkIntoTileType === TILE_FLOOR) {
-      this.x = nextX;
-      this.y = nextY;
+
+    let walkIntoTileIndex = getTileAtPixelCoord(nextX, nextY);
+    let walkIntoTileType = TILE_BRICK;
+
+    if (walkIntoTileIndex !== undefined) {
+      walkIntoTileType = roomGrid[walkIntoTileIndex];
     }
 
+    switch (walkIntoTileType) {
+      case TILE_FLOOR:
+        this.x = nextX;
+        this.y = nextY;
+        break;
+      case TILE_CUP:
+        this.reset();
+        break;
+      case TILE_DOOR:
+        if (this.keysHeld > 0) {
+          this.keysHeld--;
+          roomGrid[walkIntoTileIndex] = TILE_FLOOR;
+        }
+        break;
+      case TILE_KEY:
+        this.keysHeld++;
+        roomGrid[walkIntoTileIndex] = TILE_FLOOR;
+        break;
+      case TILE_BRICK:
+        break;
+    }
 
   }
 
@@ -70,6 +93,8 @@ class Warrior {
     }
     this.x = this.homeX;
     this.y = this.homeY;
+    this.keysHeld = 0;
+
   }
 
   initInput() {
