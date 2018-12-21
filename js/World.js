@@ -4,24 +4,24 @@ const TILE_W = 50,
   ROOM_COLS = 16,
   ROOM_ROWS = 12,
   roomGrid =
-    [4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-      1, 0, 0, 0, 1, 1, 1, 4, 4, 4, 4, 1, 1, 1, 0, 1,
-      1, 0, 0, 1, 1, 0, 0, 1, 4, 4, 1, 1, 0, 0, 0, 1,
-      1, 0, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0, 1,
-      1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1,
-      1, 2, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0, 1,
-      1, 0, 0, 1, 0, 0, 5, 0, 0, 0, 5, 0, 0, 1, 0, 1,
-      1, 1, 1, 1, 3, 3, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1,	////	added	3’s
-      1, 1, 5, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 1, 1, 1];
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 5, 0, 1, 1, 1, 1,
+      1, 0, 4, 0, 4, 0, 1, 0, 2, 0, 1, 0, 1, 4, 4, 1,
+      1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 5, 1, 1,
+      1, 1, 1, 5, 1, 1, 1, 0, 4, 0, 1, 0, 0, 0, 1, 1,
+      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 0, 1, 1,
+      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+      1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 4, 0, 1, 1,
+      1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+      1, 0, 5, 0, 5, 0, 5, 0, 3, 0, 1, 1, 1, 1, 1, 1,
+      1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 TILE_FLOOR = 0,
   TILE_BRICK = 1,
   TILE_PLAYER = 2,
-  TILE_KEY = 3,
-  TILE_DOOR = 4,
-  TILE_CUP = 5;
+  TILE_KEY = 4,
+  TILE_DOOR = 5,
+  TILE_CUP = 3;
 
 
 
@@ -33,6 +33,9 @@ function drawRoom() {
     tileLeftEdgeX = 0;
     for (let col = 0; col < ROOM_COLS; col++) {
       let tileTypeHere = roomGrid[tileIndex];
+      if (tileTypeHasTransparency(tileTypeHere)) {
+        canvasContext.drawImage(tilePics[TILE_FLOOR], tileLeftEdgeX, tileTopEdgeY);
+      }
       canvasContext.drawImage(tilePics[tileTypeHere], tileLeftEdgeX, tileTopEdgeY);
       tileIndex++;
       tileLeftEdgeX += TILE_W;
@@ -81,4 +84,10 @@ function getTileAtPixelCoord(pixelX, pixelY) {
 
   var tileIndex = roomTileToIndex(tileCol, tileRow);
   return roomGrid[tileIndex];
+}
+
+function tileTypeHasTransparency(checkTileType) {
+  return (checkTileType == TILE_CUP ||
+    checkTileType == TILE_KEY ||
+    checkTileType == TILE_DOOR);
 }
