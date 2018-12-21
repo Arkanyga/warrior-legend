@@ -1,25 +1,23 @@
 let picsToLoad = 0;
-const carPic = document.createElement("img");
-const car2Pic = document.createElement("img");
-let trackPics = [];
+const playerPic = document.createElement("img");
+let tilePics = [];
 
 
 function loadImages() {
   let imageList = [
-    { picName: carPic, src: 'player1.png' },
-    { picName: car2Pic, src: 'player2.png' },
+    { picName: playerPic, src: 'person.png' },
 
-    { trackType: TRACK_ROAD, src: 'road.png' },
-    { trackType: TRACK_WALL, src: 'wall.png' },
-    { trackType: TRACK_POLL, src: 'poll.png' },
-    { trackType: TRACK_FOREST, src: 'forest.png' },
-    { trackType: TRACK_FINISH, src: 'finish.png' }
+    { tileType: TILE_FLOOR, src: 'floor.png' },
+    { tileType: TILE_CUP, src: 'cup.png' },
+    { tileType: TILE_BRICK, src: 'brick.png' },
+    { tileType: TILE_DOOR, src: 'door.png' },
+    { tileType: TILE_KEY, src: 'key.png' }
   ]
   picsToLoad = imageList.length;
 
   for (let i = 0; i < picsToLoad; i++) {
-    if (imageList[i].trackType != undefined) {
-      loadImageForTrackCode(imageList[i].trackType, imageList[i].src);
+    if (imageList[i].tileType != undefined) {
+      loadImageForTileCode(imageList[i].tileType, imageList[i].src);
     } else {
       beginLoadingImage(imageList[i].picName, imageList[i].src)
     }
@@ -31,7 +29,7 @@ function beginLoadingImage(picName, src) {
   picName.src = 'images/' + src;
 }
 
-function loadImageForTrackCode(trackCode, src) {
-  trackPics[trackCode] = document.createElement("img");
-  beginLoadingImage(trackPics[trackCode], src);
+function loadImageForTileCode(tileCode, src) {
+  tilePics[tileCode] = document.createElement("img");
+  beginLoadingImage(tilePics[tileCode], src);
 }
